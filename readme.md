@@ -1,20 +1,15 @@
-# URL Shortener
-
-This project is a Go-based URL shortening service.  It has the ability to shorten lengthy URLs, store them in a database, and use a short code to get the original URLs.  The application runs in a containerized environment with Docker and Docker Compose and uses Redis and MySQL for caching and storage.
+# URL SHORTENER
+The Project provide the URL shortening service.It shorten the lengthy URL, store them in database and use a short code to get the original URLs. It is a Golang based application that runs in a containerized environment with Docker. It uses Redis for caching and MySQL for the storage.
 
 ## Features
-
- * **URL Shortening**: For any lengthy URL, create a special short code.
- * **Redirection**: Send clients back to the original URL after using the short code.
-
- * **Persistent Storage**: Store URL mappings in MySQL.
- * **Caching**: For quicker lookups, use Redis.
- * **Static Web Interface**: A simple front-end to interact with the service.
- * **Portable and Scalable**: Docker and Docker Compose enable containerization.
-
+* **URL Shortening** : It  make long URLs in to short codes.
+* **Redirection** : It sends the client to the original URL through the new generated short codes.
+* **Persistent storage** : All the URLs and there short codes are mapped in the MySQl database.
+* **Caching** : For quick lookups the cache data is stored in the Redis.
+* **Protable and Scalable**: Docker is implemented to enable containerization.
+* **Static Web Interface**: A Static web page front-end to access the services.
 
 ## Technologies Used
-
 * **Backend**: Go with Fiber framework
 * **Database**: MySQL
 * **Cache**: Redis
@@ -25,14 +20,14 @@ This project is a Go-based URL shortening service.  It has the ability to shorte
 
 ```plaintext
 URL-Shortener/
-|-- Dockerfile               # Dockerfile for building the application image
-|-- docker-compose.yml       # Docker Compose file for setting up the environment
+|-- Dockerfile               # Dockerfile for to create the application image
+|-- docker-compose.yml       # Docker Compose file for configiration the environment
 |-- main.go                  # Entry point of the application
 |-- db.go                    # Database initialization and table creation
 |-- base62.go                # Base62 encoding logic
-|-- public/                  # Static files for the web interface
+|-- public/                  # Static files of front-end
 |   |-- index.html           # Frontend HTML file
-|   |-- style.css            # CSS styles for the frontend
+|   |-- style.css            # CSS styles for the web interface
 |   |-- script.js            # JavaScript functionality for the frontend
 |-- go.mod                   # Go module dependencies
 |-- go.sum                   # Checksums for Go modules
@@ -66,8 +61,8 @@ URL-Shortener/
 
 ## Frontend Usage
 
-1. Enter a long URL into the input box on the web interface.
-2. Click the **Shorten** button to generate a short URL.
+1. Enter a long URL into the input box on the front-end.
+2. Click the **Shorten** button to generate a special short code mapped from the lengthy URLs.
 3. The resulting short URL will be displayed below the input box.
 4. Use the **Copy** button to copy the short URL to your clipboard.
 
@@ -102,7 +97,6 @@ The following environment variables can be configured in the `docker-compose.yml
 * `MYSQL_DATABASE`: Database name for the application.
 * `MYSQL_USER`: Username for MySQL.
 * `MYSQL_PASSWORD`: Password for the specified user.
-
 ## Database Schema
 
 The MySQL database table `urls` is created automatically with the following schema:
@@ -118,8 +112,8 @@ CREATE TABLE IF NOT EXISTS urls (
 
 ## How It Works
 
-1. The user submits a long URL through the web interface or API endpoint.
-2. A unique short code is generated using Base62 encoding.
-3. The long URL and short code are stored in MySQL.
-4. Redis is used for caching the mappings to improve lookup speed.
+1. The user enter the lengthy URLs through the web interface or the API end-points..
+2. Then a unique short code is generated based on Base62 encoding.
+3. The long URL and short code are mapped and are stored in MySQL.
+4. Redis is used for caching and to improve lookup speed.
 5. Users are redirected to the original URL by accessing the short code.
