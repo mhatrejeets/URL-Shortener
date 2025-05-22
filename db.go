@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"database/sql"
-	"log"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/redis/go-redis/v9"
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -16,16 +17,19 @@ var (
 )
 
 func initDB() {
-	dsn := "username:password@tcp(mysql:3306)/shortnerdb"
-	var err error
+	dsn := os.Getenv("DB_DSN")
+	if dsn == "" {
+		dsn = "username:password@tcp(mysql:3306)/shortnerdb"
+	}
 
+	var err error
 	DB, err = sql.Open("mysql", dsn)
 	if err != nil {
-		log.Fatal("DB open error:", err)
+		logrus.WithError(err).Fatal("Failed to open DB connection")
 	}
 
 	if err = DB.Ping(); err != nil {
-		log.Fatal("DB ping error:", err)
+		logrus.WithError(err).Fatal("Failed to ping DB")
 	}
 
 	_, err = DB.Exec(`CREATE TABLE IF NOT EXISTS urls (
@@ -35,17 +39,20 @@ func initDB() {
 		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	)`)
 	if err != nil {
-		log.Fatal("Table creation error:", err)
+		logrus.WithError(err).Fatal("Failed to create 'urls' table")
 	}
+
+	logrus.Info("Database initialized successfully")
 }
 
 func initRedis() {
 	RDB = redis.NewClient(&redis.Options{
-		//use redis: for docker
 		Addr: "redis:6379",
-
 	})
+
 	if err := RDB.Ping(Ctx).Err(); err != nil {
-		log.Fatal(err)
+		logrus.WithError(err).Fatal("Failed to connect to Redis")
 	}
+
+	logrus.Info("Redis initialized successfully")
 }

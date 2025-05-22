@@ -6,6 +6,7 @@ require (
 	github.com/go-sql-driver/mysql v1.9.2
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/redis/go-redis/v9 v9.8.0
+	github.com/sirupsen/logrus v1.9.3
 )
 
 require (
