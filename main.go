@@ -8,12 +8,12 @@ import (
 )
 
 func main() {
-	// Setup log format
+	
 	logrus.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp: true,
 	})
 
-	// Setup log level from environment
+	
 	level, err := logrus.ParseLevel(os.Getenv("LOG_LEVEL"))
 	if err != nil {
 		logrus.SetLevel(logrus.InfoLevel)
@@ -21,7 +21,7 @@ func main() {
 		logrus.SetLevel(level)
 	}
 
-	// Create logs directory if it doesn't exist
+	
 	if _, err := os.Stat("logs"); os.IsNotExist(err) {
 		os.Mkdir("logs", 0755)
 	}

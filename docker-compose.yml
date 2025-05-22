@@ -9,13 +9,13 @@ services:
       - mysql
       - redis
     environment:
-      - DB_HOST=mysql
+      - DB_DSN=username:password@tcp(mysql:3306)/shortnerdb
       - REDIS_HOST=redis
-      - LOG_LEVEL=info  # or debug, warn, error
+      - LOG_LEVEL=info
+    volumes:
+      - app_logs:/app/logs 
     networks:
       - backend
-    volumes:
-      - ./logs:/app/logs  # optional: mount logs to host
 
   mysql:
     image: mysql:8
@@ -43,6 +43,7 @@ services:
 volumes:
   mysql_data:
   redis_data:
+  app_logs:  
 
 networks:
   backend:
