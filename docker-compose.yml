@@ -11,8 +11,11 @@ services:
     environment:
       - DB_HOST=mysql
       - REDIS_HOST=redis
+      - LOG_LEVEL=info  # or debug, warn, error
     networks:
       - backend
+    volumes:
+      - ./logs:/app/logs  # optional: mount logs to host
 
   mysql:
     image: mysql:8
