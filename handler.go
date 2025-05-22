@@ -16,8 +16,8 @@ func createShortURL(c *fiber.Ctx) error {
 
 	var body Request
 	if err := c.BodyParser(&body); err != nil {
-		logrus.WithError(err).Warn("Invalid input to shorten")
-		return c.Status(fiber.StatusBadRequest).SendString("Invalid URL or input")
+		logrus.WithError(err).Warn("Invalid input to shorten the url")
+		return c.Status(fiber.StatusBadRequest).SendString("Invalid URL, or the input")
 	}
 
 	var existingCode string
@@ -32,17 +32,17 @@ func createShortURL(c *fiber.Ctx) error {
 
 	res, err := DB.Exec("INSERT INTO urls (long_url) VALUES (?)", body.URL)
 	if err != nil {
-		logrus.WithError(err).Error("Failed to insert long URL")
-		return c.Status(fiber.StatusInternalServerError).SendString("DB Error")
+		logrus.WithError(err).Error("Failed to insert the long URL")
+		return c.Status(fiber.StatusInternalServerError).SendString("DB Error occured")
 	}
 
 	id, err := res.LastInsertId()
 	if err != nil {
 		logrus.WithError(err).Error("Failed to get last insert ID")
-		return c.Status(fiber.StatusInternalServerError).SendString("Failure in fetching the ID")
+		return c.Status(fiber.StatusInternalServerError).SendString("Failure to fetching the ID")
 	}
 
-	code := encodeBase62(id)
+	code := encodeShortCode(body.URL, id)
 
 	_, err = DB.Exec("UPDATE urls SET short_code = ? WHERE id = ?", code, id)
 	if err != nil {
